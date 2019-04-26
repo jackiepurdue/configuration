@@ -30,7 +30,7 @@ if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 
-#export PS1="\[\e[38;5;58m\]$ \[\e[0m\]"
+export PS1="\[\e[38;5;58m\]$ \[\e[0m\]"
 
 
 

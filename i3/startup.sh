@@ -1,1 +1,1 @@
-exec xrandr --output LVDS-1 --auto --output  --left-of LVDS-1
+exec xrandr --output HDMI1 --auto --output DP1 --left-of HDMI1

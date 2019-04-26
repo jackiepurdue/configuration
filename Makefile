@@ -1,4 +1,4 @@
-.PHONY: all handle_dual reset
+PHONY: all
 
 BUILD_N = build
 BUILD_D= $(PWD)/$(BUILD_N)
@@ -102,7 +102,16 @@ $(EXTRA_TARGETS): $(I3_DEPS)
 
 $(I3_BUILD_F): $(I3_DEPS) 
 	@echo -e "\nPreparing i3-wm config files..."
-	echo -e $(NUM_MONITORS) "monitor(s) with display(s):" $(MONITOR_0) " "  $(MONITOR_1)
+	echo -e $(NUM_MONITORS) "monitor(s) with display(s):" $(MONITOR_0) ", " $(MONITOR_1)
+ifeq ($(NUM_MONITORS),2)
+	echo "#!/bin/bash" > $(I3_STARTUP_F)
+	echo "exec xrandr --output $(MONITOR_0) --auto --output $(MONITOR_1) --left-of $(MONITOR_0)" > $(I3_STARTUP_F)
+	chmod +x $(I3_STARTUP_F)
+	cp -f $(I3_STARTUP_F) $(I3_STARTUP_CONFIG_F)
+	echo "exec --no-startup-id $(I3_STARTUP_CONFIG_F)" > $(I3_DISPLAY_F)
+	echo "workspace 6 output $(MONITOR_0)" >> $(I3_DISPLAY_F)
+	echo "workspace 1 output $(MONITOR_1)" >> $(I3_DISPLAY_F)
+endif
 	mkdir -p $(I3_BUILD_D)
 	cat $(I3_DEPS) > $(I3_BUILD_F)
 	mkdir -p $(I3_CONFIG_D)
@@ -161,12 +170,3 @@ reset:
 	rm -rf $(EMACS_CONFIG_F)
 	rm -rf $(BASH_CONFIG_F)
 	rm -rf $(TERMINAL_CONFIG_F)
-
-handle_dual:
-	echo "#!/bin/bash" > $(I3_STARTUP_F)
-	echo "exec xrandr --output $(MONITOR_0) --auto --output $(MONITOR_1) --left-of $(MONITOR_0)" > $(I3_STARTUP_F)
-	chmod +x $(I3_STARTUP_F)
-	cp -f $(I3_STARTUP_F) $(I3_STARTUP_CONFIG_F)
-	echo "exec --no-startup-id $(I3_STARTUP_CONFIG_F)" > $(I3_DISPLAY_F)
-	echo "workspace 6 output $(MONITOR_0)" >> $(I3_DISPLAY_F)
-	echo "workspace 1 output $(MONITOR_1)" >> $(I3_DISPLAY_F)
