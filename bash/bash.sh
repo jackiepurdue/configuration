@@ -64,8 +64,12 @@ r() {
   cd /
 }
 
-dt() {
+d() {
   date "+%F %T"
+}
+
+clean() {
+  sed -i 's/[[:space:]]*$//' $1
 }
 
 extract () {
