@@ -25,18 +25,12 @@ _history() {
 l() {
   ls
 }
-
-
 ll() {
   ls -l
 }
-
-
 la() {
   ls -a
 }
-
-
 lla() {
   ls -l -a
 }
@@ -70,6 +64,15 @@ d() {
 
 ftr() {
   sed -i 's/[[:space:]]*$//' $1
+}
+
+sspace() {
+  sed -i 'N;/^\n$/d;P;D' $1
+}
+
+cformat() {
+  ftr $1
+  sspace $1
 }
 
 extract () {

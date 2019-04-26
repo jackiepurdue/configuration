@@ -84,7 +84,7 @@ EMACS_BUILD_D = $(BUILD_D)/emacs
 EMACS_BUILD_F = $(EMACS_BUILD_D)/emacs.el
 EMACS_ADDONS_BUILD_D = $(EMACS_BUILD_D)/addons
 EMACS_DEPS = $(EMACS_F)
-EMACS_T = $(EMACS_BUILD_F) $(EMACS_CONFIG_F) $(EMACS_ADDONS_BUILD_D) $(EMACS_ADDONS_CONFIG_D)
+EMACS_T = $(EMACS_BUILD_F) $(EMACS_ADDONS_BUILD_D)
 
 BASH_D = $(PWD)/bash
 BASH_F = $(BASH_D)/bash.sh
@@ -132,13 +132,10 @@ $(BROWSER_BUILD_F): $(BROWSER_DEPS)
 	mkdir -p $(BROWSER_BUILD_D)
 	sed -e 's/^/    /' $(BROWSER_SCRIPTS_F) > $(BROWSER_BUILD_TEMP_F)
 	sed -e "/_SCRIPTS_/{r $(BROWSER_BUILD_TEMP_F)" -e "d}" $(BROWSER_BASE_F) > $(BROWSER_BUILD_INDEX_F)
-
 	sed -e 's/^/    /' $(BROWSER_HEAD_F) > $(BROWSER_BUILD_TEMP_F)
 	sed -i -e "/_HEAD_/{r $(BROWSER_BUILD_TEMP_F)" -e "d}" $(BROWSER_BUILD_INDEX_F)
-
 	sed -e 's/^/    /' $(BROWSER_BODY_F) > $(BROWSER_BUILD_TEMP_F)
 	sed -i -e "/_BODY_/{r $(BROWSER_BUILD_TEMP_F)" -e "d}" $(BROWSER_BUILD_INDEX_F)
-
 	rm -f $(BROWSER_BUILD_TEMP_F)
 	mkdir -p $(BROWSER_CONFIG_D)
 	cp -f $(BROWSER_STYLES_F) $(BROWSER_BUILD_STYLES_F)
@@ -152,13 +149,12 @@ $(FIREFOX_T): $(FIREFOX_DEPS)
 	cp -f $(FIREFOX_F) $(FIREFOX_BUILD_F)
 	cp -f $(FIREFOX_BUILD_F) $(FIREFOX_USER_CONFIG_F)
 
-$(EMACS_T):$(EMACS_DEPS)
-	@echo -e "\nPreparing Emacs configuration files..."
+$(EMACS_T): $(EMACS_DEPS)
 	mkdir -p $(EMACS_BUILD_D)
 	cp -TR $(EMACS_ADDONS_D) $(EMACS_ADDONS_BUILD_D)
-	cp -TR $(EMACS_F) $(EMACS_BUILD_F)
-	cp -TR $(EMACS_ADDONS_D) $(EMACS_ADDONS_CONFIG_D)
-	cp -TR $(EMACS_BUILD_F) $(EMACS_CONFIG_F)
+	cp -f $(EMACS_F) $(EMACS_BUILD_F)
+	cp -TR  $(EMACS_ADDONS_BUILD_D) $(EMACS_ADDONS_CONFIG_D)
+	cp -f $(EMACS_BUILD_F) $(EMACS_CONFIG_F)
 
 $(BASH_T): $(BASH_DEPS)
 	@echo -e "\nPreparing Bash and Urxvt configuration files..."
@@ -169,7 +165,7 @@ $(BASH_T): $(BASH_DEPS)
 	cp -f $(TERMINAL_BUILD_F) $(TERMINAL_CONFIG_F)
 
 reset:
-	@echo "\nRemoving build files..."
+	@echo -e "\nRemoving build files..."
 	rm -rf $(EMACS_ADDONS_CONFIG_D)/auto-save-list/*
 	rm -rf $(BUILD_D)/*
 	rm -rf $(FIREFOX_USER_CONFIG_D)
