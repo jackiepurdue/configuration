@@ -4,17 +4,19 @@ BUILD_N = build
 BUILD_D= $(PWD)/$(BUILD_N)
 CONFIG_D = $(HOME)/.config
 
+
 I3_N = i3
+I3_STARTUP_N = startup.sh
 I3_CONFIG_D = $(CONFIG_D)/$(I3_N)
-I3_STARTUP_CONFIG_F = $(I3_CONFIG_D)/startup.sh
+I3_STARTUP_CONFIG_F = $(I3_CONFIG_D)/$(I3_STARTUP_N)
 I3_BUILD_D = $(BUILD_D)/$(I3_N)
 I3_D = $(PWD)/$(I3_N)
 I3_HEAD_F = $(I3_D)/i3-head.conf
-I3_DISPLAY_F = $(I3_D)/i3-display.conf
+I3_DISPLAY_TEMP_F = $(I3_D)/i3-display-temp.conf
 I3_THEME_F = $(I3_D)/i3-theme.conf
 I3_BINDING_F = $(I3_D)/i3-binding.conf
 I3_BAR_F = $(I3_D)/i3-bar.conf
-I3_STARTUP_F = $(I3_D)/startup.sh
+I3_STARTUP_BUILD_F = $(I3_BUILD_D)/$(I3_STARTUP_N)
 I3_BUILD_F = $(I3_BUILD_D)/i3.conf
 
 NUM_MONITORS := $(shell xrandr --listmonitors | grep Monitors: | cut -d ' ' -f 2)
@@ -24,7 +26,7 @@ MONITOR_1 := $(shell xrandr --listmonitors | grep 1: | cut -d ' ' -f 6)
 ifeq ($(NUM_MONITORS),1)
 	I3_DEPS = $(I3_HEAD_F) $(I3_THEME_F) $(I3_BINDING_F) $(I3_BAR_F)
 else
-	I3_DEPS = $(I3_HEAD_F) $(I3_DISPLAY_F) $(I3_THEME_F) $(I3_BINDING_F) $(I3_BAR_F)
+	I3_DEPS = $(I3_HEAD_F) $(I3_DISPLAY_TEMP_F) $(I3_THEME_F) $(I3_BINDING_F) $(I3_BAR_F)
 	EXTRA_TARGETS = handle_dual
 endif
 
@@ -107,15 +109,16 @@ $(I3_BUILD_F): $(I3_DEPS)
 	cat $(I3_DEPS) > $(I3_BUILD_F)
 	mkdir -p $(I3_CONFIG_D)
 	ln -sf $(I3_BUILD_F) $(I3_CONFIG_D)/config
+	rm -f $(I3_DISPLAY_TEMP_F)
 
 handle_dual:
-	echo "#!/bin/bash" > $(I3_STARTUP_F)
-	echo "exec xrandr --output $(MONITOR_0) --auto --output $(MONITOR_1) --left-of $(MONITOR_0)" > $(I3_STARTUP_F)
-	chmod +x $(I3_STARTUP_F)
-	cp -f $(I3_STARTUP_F) $(I3_STARTUP_CONFIG_F)
-	echo "exec --no-startup-id $(I3_STARTUP_CONFIG_F)" > $(I3_DISPLAY_F)
-	echo "workspace 6 output $(MONITOR_0)" >> $(I3_DISPLAY_F)
-	echo "workspace 1 output $(MONITOR_1)" >> $(I3_DISPLAY_F)
+	echo "#!/bin/bash" > $(I3_STARTUP_BUILD_F)
+	echo "exec xrandr --output $(MONITOR_0) --auto --output $(MONITOR_1) --left-of $(MONITOR_0)" > $(I3_STARTUP_BUILD_F)
+	chmod +x $(I3_STARTUP_BUILD_F)
+	cp -f $(I3_STARTUP_BUILD_F) $(I3_STARTUP_CONFIG_F)
+	echo "exec --no-startup-id $(I3_STARTUP_CONFIG_F)" > $(I3_DISPLAY_TEMP_F)
+	echo "workspace 6 output $(MONITOR_0)" >> $(I3_DISPLAY_TEMP_F)
+	echo "workspace 1 output $(MONITOR_1)" >> $(I3_DISPLAY_TEMP_F)
 
 $(I3_STATUS_BUILD_F): $(I3_STATUS_DEPS) 
 	@echo -e "\nPreparing i3status config files..."
