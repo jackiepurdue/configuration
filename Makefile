@@ -1,7 +1,7 @@
 .PHONY: all reset handle_dual
 
 BUILD_N = build
-BUILD_D= $(PWD)/$(BUILD_N)
+BUILD_D = $(PWD)/$(BUILD_N)
 CONFIG_D = $(HOME)/.config
 
 I3_N = i3
@@ -54,7 +54,7 @@ BROWSER_BUILD_D= $(BUILD_D)/$(BROWSER_N)
 BROWSER_INDEX_CONFIG_F = $(BROWSER_CONFIG_D)/index.html
 BROWSER_STYLES_CONFIG_F = $(BROWSER_CONFIG_D)/styles.css
 BROWSER_STYLES_CONFIG_F = $(BROWSER_CONFIG_D)/styles.css
-BROWSER_BUILD_TMP_F = $(BROWSER_BUILD_D)/tmp
+BROWSER_BUILD_TEMP_F = $(BROWSER_BUILD_D)/tmp
 BROWSER_BUILD_F = $(BROWSER_BUILD_D)/index.html $(BROWSER_BUILD_D)/styles.css
 BROWSER_BASE_F = $(BROWSER_D)/base.html
 BROWSER_STYLES_F = $(BROWSER_D)/styles.css 
@@ -107,7 +107,7 @@ $(I3_BUILD_F): $(I3_DEPS)
 	mkdir -p $(I3_BUILD_D)
 	cat $(I3_DEPS) > $(I3_BUILD_F)
 	mkdir -p $(I3_CONFIG_D)
-	ln -sf $(I3_BUILD_F) $(I3_CONFIG_D)/config
+	cp -f $(I3_BUILD_F) $(I3_CONFIG_D)/config
 	rm -f $(I3_DISPLAY_TEMP_F)
 
 handle_dual:
@@ -125,45 +125,48 @@ $(I3_STATUS_BUILD_F): $(I3_STATUS_DEPS)
 	mkdir -p $(I3_BUILD_D)
 	cat $(I3_STATUS) > $(I3_STATUS_BUILD_F)
 	mkdir -p $(I3_STATUS_CONFIG_D)
-	ln -sf $(I3_STATUS_BUILD_F) $(I3_STATUS_CONFIG_F)
+	cp -f $(I3_STATUS_BUILD_F) $(I3_STATUS_CONFIG_F)
 
 $(BROWSER_BUILD_F): $(BROWSER_DEPS)
 	@echo -e "\nCreating a browser home page..."
 	mkdir -p $(BROWSER_BUILD_D)
-	sed -e 's/^/    /' $(BROWSER_SCRIPTS_F) > $(BROWSER_BUILD_TMP_F)
-	sed -e "/_SCRIPTS_/{r  $(BROWSER_BUILD_TMP_F)" -e "d}" $(BROWSER_BASE_F) > $(BROWSER_BUILD_INDEX_F)
-	sed -e 's/^/    /' $(BROWSER_HEAD_F) > $(BROWSER_BUILD_TMP_F)
-	sed -i -e "/_HEAD_/{r $(BROWSER_BUILD_TMP_F)" -e "d}" $(BROWSER_BUILD_INDEX_F)
-	sed -e 's/^/    /' $(BROWSER_BODY_F) > $(BROWSER_BUILD_TMP_F)
-	sed -i -e "/_BODY_/{r $(BROWSER_BUILD_TMP_F)" -e "d}" $(BROWSER_BUILD_INDEX_F)
-	rm $(BROWSER_BUILD_TMP_F)
+	sed -e 's/^/    /' $(BROWSER_SCRIPTS_F) > $(BROWSER_BUILD_TEMP_F)
+	sed -e "/_SCRIPTS_/{r $(BROWSER_BUILD_TEMP_F)" -e "d}" $(BROWSER_BASE_F) > $(BROWSER_BUILD_INDEX_F)
+
+	sed -e 's/^/    /' $(BROWSER_HEAD_F) > $(BROWSER_BUILD_TEMP_F)
+	sed -i -e "/_HEAD_/{r $(BROWSER_BUILD_TEMP_F)" -e "d}" $(BROWSER_BUILD_INDEX_F)
+
+	sed -e 's/^/    /' $(BROWSER_BODY_F) > $(BROWSER_BUILD_TEMP_F)
+	sed -i -e "/_BODY_/{r $(BROWSER_BUILD_TEMP_F)" -e "d}" $(BROWSER_BUILD_INDEX_F)
+
+	rm -f $(BROWSER_BUILD_TEMP_F)
 	mkdir -p $(BROWSER_CONFIG_D)
-	cp -rf $(BROWSER_STYLES_F) $(BROWSER_BUILD_STYLES_F)
-	ln -sf $(BROWSER_BUILD_STYLES_F) $(BROWSER_STYLES_CONFIG_F)
-	ln -sf $(BROWSER_BUILD_INDEX_F) $(BROWSER_INDEX_CONFIG_F)
+	cp -f $(BROWSER_STYLES_F) $(BROWSER_BUILD_STYLES_F)
+	cp -f $(BROWSER_BUILD_STYLES_F) $(BROWSER_STYLES_CONFIG_F)
+	cp -f $(BROWSER_BUILD_INDEX_F) $(BROWSER_INDEX_CONFIG_F)
 
 $(FIREFOX_T): $(FIREFOX_DEPS)
 	@echo -e "\nPreparing minimalist firefox profile..."
 	mkdir -p $(FIREFOX_USER_CONFIG_D)
 	mkdir -p $(FIREFOX_BUILD_D)
-	cp -rf $(FIREFOX_F) $(FIREFOX_BUILD_F)
-	ln -sf $(FIREFOX_BUILD_F) $(FIREFOX_USER_CONFIG_F)
+	cp -f $(FIREFOX_F) $(FIREFOX_BUILD_F)
+	cp -f $(FIREFOX_BUILD_F) $(FIREFOX_USER_CONFIG_F)
 
 $(EMACS_T):$(EMACS_DEPS)
 	@echo -e "\nPreparing Emacs configuration files..."
 	mkdir -p $(EMACS_BUILD_D)
 	cp -TR $(EMACS_ADDONS_D) $(EMACS_ADDONS_BUILD_D)
 	cp -TR $(EMACS_F) $(EMACS_BUILD_F)
-	ln -sfT $(EMACS_ADDONS_D) $(EMACS_ADDONS_CONFIG_D)
-	ln -sfT $(EMACS_BUILD_F) $(EMACS_CONFIG_F)
+	cp -TR $(EMACS_ADDONS_D) $(EMACS_ADDONS_CONFIG_D)
+	cp -TR $(EMACS_BUILD_F) $(EMACS_CONFIG_F)
 
 $(BASH_T): $(BASH_DEPS)
 	@echo -e "\nPreparing Bash and Urxvt configuration files..."
 	mkdir -p $(BASH_BUILD_D)
-	cp -TR $(BASH_F) $(BASH_BUILD_F)
-	cp -TR $(TERMINAL_F) $(TERMINAL_BUILD_F)
-	ln -sf $(BASH_BUILD_F) $(BASH_CONFIG_F)
-	ln -sf $(TERMINAL_BUILD_F) $(TERMINAL_CONFIG_F)
+	cp -f $(BASH_F) $(BASH_BUILD_F)
+	cp -f $(TERMINAL_F) $(TERMINAL_BUILD_F)
+	cp -f $(BASH_BUILD_F) $(BASH_CONFIG_F)
+	cp -f $(TERMINAL_BUILD_F) $(TERMINAL_CONFIG_F)
 
 reset:
 	@echo "\nRemoving build files..."
