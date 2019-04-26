@@ -4,7 +4,6 @@ BUILD_N = build
 BUILD_D= $(PWD)/$(BUILD_N)
 CONFIG_D = $(HOME)/.config
 
-
 I3_N = i3
 I3_STARTUP_N = startup.sh
 I3_CONFIG_D = $(CONFIG_D)/$(I3_N)
@@ -103,7 +102,7 @@ all: $(EXTRA_TARGETS) $(I3_BUILD_F) $(I3_STATUS_BUILD_F) $(BROWSER_BUILD_F) $(EM
 $(EXTRA_TARGETS): $(I3_DEPS)
 
 $(I3_BUILD_F): $(I3_DEPS) 
-	@echo -e "\nPreparing i3-wm config files..."
+	@echo -e "\nPreparing i3-wm configuration files..."
 	echo -e $(NUM_MONITORS) "monitor(s) with display(s):" $(MONITOR_0) ", " $(MONITOR_1)
 	mkdir -p $(I3_BUILD_D)
 	cat $(I3_DEPS) > $(I3_BUILD_F)
@@ -112,6 +111,7 @@ $(I3_BUILD_F): $(I3_DEPS)
 	rm -f $(I3_DISPLAY_TEMP_F)
 
 handle_dual:
+	@echo -e "\nMultiple displays detected, creating scripts..."
 	echo "#!/bin/bash" > $(I3_STARTUP_BUILD_F)
 	echo "exec xrandr --output $(MONITOR_0) --auto --output $(MONITOR_1) --left-of $(MONITOR_0)" > $(I3_STARTUP_BUILD_F)
 	chmod +x $(I3_STARTUP_BUILD_F)
@@ -121,14 +121,14 @@ handle_dual:
 	echo "workspace 1 output $(MONITOR_1)" >> $(I3_DISPLAY_TEMP_F)
 
 $(I3_STATUS_BUILD_F): $(I3_STATUS_DEPS) 
-	@echo -e "\nPreparing i3status config files..."
+	@echo -e "\nPreparing i3status configuration files..."
 	mkdir -p $(I3_BUILD_D)
 	cat $(I3_STATUS) > $(I3_STATUS_BUILD_F)
 	mkdir -p $(I3_STATUS_CONFIG_D)
 	ln -sf $(I3_STATUS_BUILD_F) $(I3_STATUS_CONFIG_F)
 
 $(BROWSER_BUILD_F): $(BROWSER_DEPS)
-	@echo -e "\nPreparing browser start page..."
+	@echo -e "\nCreating a browser home page..."
 	mkdir -p $(BROWSER_BUILD_D)
 	sed -e 's/^/    /' $(BROWSER_SCRIPTS_F) > $(BROWSER_BUILD_TMP_F)
 	sed -e "/_SCRIPTS_/{r  $(BROWSER_BUILD_TMP_F)" -e "d}" $(BROWSER_BASE_F) > $(BROWSER_BUILD_INDEX_F)
@@ -143,14 +143,14 @@ $(BROWSER_BUILD_F): $(BROWSER_DEPS)
 	ln -sf $(BROWSER_BUILD_INDEX_F) $(BROWSER_INDEX_CONFIG_F)
 
 $(FIREFOX_T): $(FIREFOX_DEPS)
-	@echo -e "\nPreparing $(FIREFOX_USER_CONFIG_D) config files..."
+	@echo -e "\nPreparing minimalist firefox profile..."
 	mkdir -p $(FIREFOX_USER_CONFIG_D)
 	mkdir -p $(FIREFOX_BUILD_D)
 	cp -rf $(FIREFOX_F) $(FIREFOX_BUILD_F)
 	ln -sf $(FIREFOX_BUILD_F) $(FIREFOX_USER_CONFIG_F)
 
 $(EMACS_T):$(EMACS_DEPS)
-	@echo -e "\nPreparing emacs config files..."
+	@echo -e "\nPreparing Emacs configuration files..."
 	mkdir -p $(EMACS_BUILD_D)
 	cp -TR $(EMACS_ADDONS_D) $(EMACS_ADDONS_BUILD_D)
 	cp -TR $(EMACS_F) $(EMACS_BUILD_F)
@@ -158,7 +158,7 @@ $(EMACS_T):$(EMACS_DEPS)
 	ln -sfT $(EMACS_BUILD_F) $(EMACS_CONFIG_F)
 
 $(BASH_T): $(BASH_DEPS)
-	@echo -e "\nPreparing bashrc and Xdefaults config files..."
+	@echo -e "\nPreparing Bash and Urxvt configuration files..."
 	mkdir -p $(BASH_BUILD_D)
 	cp -TR $(BASH_F) $(BASH_BUILD_F)
 	cp -TR $(TERMINAL_F) $(TERMINAL_BUILD_F)
@@ -166,7 +166,7 @@ $(BASH_T): $(BASH_DEPS)
 	ln -sf $(TERMINAL_BUILD_F) $(TERMINAL_CONFIG_F)
 
 reset:
-	@echo 'Deleting stuff...'
+	@echo "\nRemoving build files..."
 	rm -rf $(EMACS_ADDONS_CONFIG_D)/auto-save-list/*
 	rm -rf $(BUILD_D)/*
 	rm -rf $(FIREFOX_USER_CONFIG_D)
