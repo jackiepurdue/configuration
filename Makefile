@@ -57,7 +57,7 @@ BROWSER_STYLES_CONFIG_F = $(BROWSER_CONFIG_D)/styles.css
 BROWSER_BUILD_TEMP_F = $(BROWSER_BUILD_D)/tmp
 BROWSER_BUILD_F = $(BROWSER_BUILD_D)/index.html $(BROWSER_BUILD_D)/styles.css
 BROWSER_BASE_F = $(BROWSER_D)/base.html
-BROWSER_STYLES_F = $(BROWSER_D)/styles.css 
+BROWSER_STYLES_F = $(BROWSER_D)/styles.css
 BROWSER_BODY_F =  $(BROWSER_D)/body.html
 BROWSER_HEAD_F = $(BROWSER_D)/head.html
 BROWSER_SCRIPTS_F = $(BROWSER_D)/scripts.js
@@ -68,7 +68,7 @@ BROWSER := $(BROWSER_BASE_F) $(BROWSER_STYLES_F) $(BROWSER_BODY_F) $(BROWSER_HEA
 FIREFOX_CONFIG_D = $(HOME)/.mozilla/firefox
 FIREFOX_PROFILE_N = $(shell ls $(FIREFOX_CONFIG_D) | grep '[a-z0-9]*.default' | head -n 1)
 FIREFOX_USER_CONFIG_D = $(FIREFOX_CONFIG_D)/$(FIREFOX_PROFILE_N)/chrome
-FIREFOX_USER_CONFIG_F = $(FIREFOX_USER_CONFIG_D)/userChrome.css 
+FIREFOX_USER_CONFIG_F = $(FIREFOX_USER_CONFIG_D)/userChrome.css
 FIREFOX_F = $(BROWSER_D)/browser-theme.css
 FIREFOX_BUILD_D = $(BROWSER_BUILD_D)
 FIREFOX_BUILD_F = $(FIREFOX_BUILD_D)/firefox.css
@@ -101,7 +101,7 @@ all: $(EXTRA_TARGETS) $(I3_BUILD_F) $(I3_STATUS_BUILD_F) $(BROWSER_BUILD_F) $(EM
 
 $(EXTRA_TARGETS): $(I3_DEPS)
 
-$(I3_BUILD_F): $(I3_DEPS) 
+$(I3_BUILD_F): $(I3_DEPS)
 	@echo -e "\nPreparing i3-wm configuration files..."
 	echo -e $(NUM_MONITORS) "monitor(s) with display(s):" $(MONITOR_0) ", " $(MONITOR_1)
 	mkdir -p $(I3_BUILD_D)
@@ -120,7 +120,7 @@ handle_dual:
 	echo "workspace 6 output $(MONITOR_0)" >> $(I3_DISPLAY_TEMP_F)
 	echo "workspace 1 output $(MONITOR_1)" >> $(I3_DISPLAY_TEMP_F)
 
-$(I3_STATUS_BUILD_F): $(I3_STATUS_DEPS) 
+$(I3_STATUS_BUILD_F): $(I3_STATUS_DEPS)
 	@echo -e "\nPreparing i3status configuration files..."
 	mkdir -p $(I3_BUILD_D)
 	cat $(I3_STATUS) > $(I3_STATUS_BUILD_F)

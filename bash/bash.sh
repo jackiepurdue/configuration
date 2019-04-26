@@ -68,7 +68,7 @@ d() {
   date "+%F %T"
 }
 
-clean() {
+ftr() {
   sed -i 's/[[:space:]]*$//' $1
 }
 
