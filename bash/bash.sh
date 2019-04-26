@@ -12,7 +12,7 @@ _prompt() {
 }
 
 _history() {
-  export HISTTIMEFORMAT="%h %d %H:%M:%S"
+  export HISTTIMEFORMAT="%h %d %H:%M:%S "
   export HISTFILESIZE=40000
   export HISTSIZE=10000
   export HISTCONTROL=ignoredups
