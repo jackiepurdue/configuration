@@ -1,4 +1,4 @@
-.PHONY: all
+.PHONY: all reset handle_dual
 
 BUILD_N = build
 BUILD_D= $(PWD)/$(BUILD_N)
