@@ -22,7 +22,18 @@
 (add-hook 'window-setup-hook 'on-after-init)
 
 (add-to-list 'load-path "~/.emacs.d/org-mode" t)
+
 (require 'org)
+(global-set-key (kbd "C-c c") 'org-capture)
+(setq todo-notes-file-self "~/oper/notes/todo.org")
+(setq journal-notes-file-self "~/oper/notes/journal.org")
+(setq org-capture-templates
+  (quote (
+    ("t" "TODO" entry (file todo-notes-file-self)
+     "* TODO %?")
+    ("j" "Journal" entry (file+datetree journal-notes-file-self)
+     "* %?")
+)))
 
 (add-to-list 'load-path "~/.emacs.d/company-mode" t)
 (require 'company)
