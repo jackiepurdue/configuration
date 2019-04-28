@@ -1,5 +1,4 @@
 (package-initialize)
-
 (menu-bar-mode -1)
 
 (setq-default mode-line-format nil)
@@ -21,7 +20,6 @@
 
 (add-hook 'window-setup-hook 'on-after-init)
 
-(add-to-list 'load-path "~/.emacs.d/org-mode" t)
 
 (require 'org)
 (global-set-key (kbd "C-c c") 'org-capture)
@@ -35,12 +33,12 @@
      "* %?")
 )))
 
-(add-to-list 'load-path "~/.emacs.d/company-mode" t)
+(require 'org-ref)
+
 (require 'company)
 (add-hook 'after-init-hook 'global-company-mode)
 
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
-
 (load-theme 'monokai t)
 
 (setq org-todo-keywords '((sequence "TODO" "WAITING" "DONE")))
