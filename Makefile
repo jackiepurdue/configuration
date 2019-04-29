@@ -166,7 +166,7 @@ $(BASH_T): $(BASH_DEPS)
 
 reset:
 	@echo -e "\nRemoving build files..."
-	rm -rf $(EMACS_ADDONS_CONFIG_D)/auto-save-list/*
+	rm -rf $(EMACS_ADDONS_CONFIG_D)
 	rm -rf $(BUILD_D)/*
 	rm -rf $(FIREFOX_USER_CONFIG_D)
 	rm -rf $(EMACS_CONFIG_F)
