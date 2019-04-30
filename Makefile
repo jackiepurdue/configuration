@@ -97,7 +97,17 @@ TERMINAL_BUILD_F = $(BASH_BUILD_D)/terminal.conf
 BASH_DEPS = $(BASH_F) $(TERMINAL_F)
 BASH_T = $(BASH_BUILD_F) $(BASH_CONFIG_F) $(TERMINAL_BUILD_F) $(TERMINAL_CONFIG_F)
 
-all: $(EXTRA_TARGETS) $(I3_BUILD_F) $(I3_STATUS_BUILD_F) $(BROWSER_BUILD_F) $(EMACS_T) $(BASH_T) $(FIREFOX_T)
+
+INIT_D = $(PWD)/init
+XINIT_F = $(INIT_D)/xinitrc.conf
+PROFILE_F = $(INIT_D)/profile.conf
+PROFILE_CONFIG_F = $(HOME)/.bash_profile
+XINIT_CONFIG_F = $(HOME)/.xinitrc
+INIT_T = $(XINIT_F)
+INIT_T = $(XINIT_CONFIG_F) $(PROFILE_CONFIG_F)
+INIT_DEPS = $(XINIT_F) $(PROFILE_F)
+
+all: $(EXTRA_TARGETS) $(I3_BUILD_F) $(I3_STATUS_BUILD_F) $(BROWSER_BUILD_F) $(EMACS_T) $(BASH_T) $(FIREFOX_T) $(INIT_T)
 
 $(EXTRA_TARGETS): $(I3_DEPS)
 
@@ -164,6 +174,11 @@ $(BASH_T): $(BASH_DEPS)
 	cp -f $(BASH_BUILD_F) $(BASH_CONFIG_F)
 	cp -f $(TERMINAL_BUILD_F) $(TERMINAL_CONFIG_F)
 
+$(INIT_T): $(INIT_DEPS)
+	@echo -e "\nPreparing initialization configuration files..."
+	cp -f $(XINIT_F) $(XINIT_CONFIG_F)
+	cp -f $(PROFILE_F) $(PROFILE_CONFIG_F)
+
 reset:
 	@echo -e "\nRemoving build files..."
 	rm -rf $(EMACS_ADDONS_CONFIG_D)
@@ -172,3 +187,5 @@ reset:
 	rm -rf $(EMACS_CONFIG_F)
 	rm -rf $(BASH_CONFIG_F)
 	rm -rf $(TERMINAL_CONFIG_F)
+	rm -rf $(PROFILE_CONFIG_F)
+	rm -rf $(XINIT_CONFIG_F)
