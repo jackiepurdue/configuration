@@ -1,5 +1,5 @@
 _main() {
-  export PATH=~/.local/bin:$PATH
+  export PATH=~/.local/bin:$PATH  
   _history
   _prompt
   unset _main

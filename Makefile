@@ -1,5 +1,10 @@
 .PHONY: all reset handle_dual
 
+MAIN_D = $(HOME)/focal
+DRAFT_D = $(MAIN_D)/draft
+DOWNLOAD_D = $(MAIN_D)/net
+PROJECT_D = $(MAIN_D)/work
+
 BUILD_N = build
 BUILD_D = $(PWD)/$(BUILD_N)
 CONFIG_D = $(HOME)/.config
@@ -102,6 +107,7 @@ INIT_D = $(PWD)/init
 XINIT_F = $(INIT_D)/xinitrc.conf
 PROFILE_F = $(INIT_D)/profile.conf
 PROFILE_CONFIG_F = $(HOME)/.bash_profile
+PROFILE_TEMP_F = $(I3_D)/profile-temp.conf
 XINIT_CONFIG_F = $(HOME)/.xinitrc
 INIT_T = $(XINIT_F)
 INIT_T = $(XINIT_CONFIG_F) $(PROFILE_CONFIG_F)
@@ -173,11 +179,17 @@ $(BASH_T): $(BASH_DEPS)
 	cp -f $(TERMINAL_F) $(TERMINAL_BUILD_F)
 	cp -f $(BASH_BUILD_F) $(BASH_CONFIG_F)
 	cp -f $(TERMINAL_BUILD_F) $(TERMINAL_CONFIG_F)
+	echo -e "\ncd $(MAIN_D)" >> $(BASH_CONFIG_F)
 
 $(INIT_T): $(INIT_DEPS)
-	@echo -e "\nPreparing initialization configuration files..."
+	@echo -e "\nPreparing initialization configuration files..."	
+	mkdir -p $(MAIN_D)
+	mkdir -p $(DRAFT_D)
+	mkdir -p $(DOWNLOAD_D)
+	mkdir -p $(PROJECT_D) 
 	cp -f $(XINIT_F) $(XINIT_CONFIG_F)
 	cp -f $(PROFILE_F) $(PROFILE_CONFIG_F)
+	rm $(PROFILE_TEMP_F)
 
 reset:
 	@echo -e "\nRemoving build files..."
