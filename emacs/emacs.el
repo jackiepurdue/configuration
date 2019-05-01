@@ -23,13 +23,13 @@
 
 (require 'org)
 (global-set-key (kbd "C-c c") 'org-capture)
-(setq todo-notes-file-self "~/oper/notes/todo.org")
-(setq journal-notes-file-self "~/oper/notes/journal.org")
+(setq todo-notes-file-self "~/focal/notes/todo.org")
+(setq refile-notes-file-self "~/focal/notes/refile.org")
 (setq org-capture-templates
   (quote (
     ("t" "TODO" entry (file todo-notes-file-self)
      "* TODO %?")
-    ("j" "Journal" entry (file+datetree journal-notes-file-self)
+    ("j" "Journal" entry (file+datetree refile-notes-file-self)
      "* %?")
 )))
 
