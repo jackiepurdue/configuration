@@ -30,9 +30,17 @@
     ("t" "TODO" entry (file todo-notes-file-self)
      "* TODO %?")
     ("j" "Journal" entry (file+datetree refile-notes-file-self)
-     "* %?")
+     "* TODO %?")
 )))
 
+(setq org-tag-alist '(
+  ("sometime" . ?s)
+  ("urgent" . ?u)
+  ("minor" . ?m)
+  ("important" . ?i)
+  ("evident" . ?i)
+  ("note" . ?i)))
+  
 (require 'org-ref)
 
 (require 'company)
@@ -41,4 +49,4 @@
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
 (load-theme 'monokai t)
 
-(setq org-todo-keywords '((sequence "TODO" "WAITING" "DONE")))
+(setq org-todo-keywords '((sequence "TODO" "WAITING" "REFILE" "DONE")))
