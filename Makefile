@@ -30,7 +30,7 @@ MONITOR_1 := $(shell xrandr --listmonitors | grep 1: | cut -d ' ' -f 6)
 ifeq ($(NUM_MONITORS),1)
 	I3_DEPS = $(I3_HEAD_F) $(I3_THEME_F) $(I3_BINDING_F) $(I3_BAR_F)
 else
-	I3_DEPS = $(I3_HEAD_F) $(I3_DISPLAY_TEMP_F) $(I3_THEME_F) $(I3_BINDING_F) $(I3_BAR_F)
+	I3_DEPS = $(I3_HEAD_F) $(I3_THEME_F) $(I3_BINDING_F) $(I3_BAR_F)
 	EXTRA_TARGETS = handle_dual
 endif
 
@@ -128,10 +128,13 @@ $(I3_BUILD_F): $(I3_DEPS)
 
 handle_dual:
 	@echo -e "\nMultiple displays detected, creating scripts..."
+	mkdir -p $(I3_BUILD_D)
 	echo "#!/bin/bash" > $(I3_STARTUP_BUILD_F)
 	echo "exec xrandr --output $(MONITOR_0) --auto --output $(MONITOR_1) --left-of $(MONITOR_0)" > $(I3_STARTUP_BUILD_F)
 	chmod +x $(I3_STARTUP_BUILD_F)
+	mkdir -p $(I3_CONFIG_D)
 	cp -f $(I3_STARTUP_BUILD_F) $(I3_STARTUP_CONFIG_F)
+	mkdir -p $(I3_CONFIG_D)
 	echo "exec --no-startup-id $(I3_STARTUP_CONFIG_F)" > $(I3_DISPLAY_TEMP_F)
 	echo "workspace 6 output $(MONITOR_0)" >> $(I3_DISPLAY_TEMP_F)
 	echo "workspace 1 output $(MONITOR_1)" >> $(I3_DISPLAY_TEMP_F)
@@ -189,7 +192,6 @@ $(INIT_T): $(INIT_DEPS)
 	mkdir -p $(PROJECT_D) 
 	cp -f $(XINIT_F) $(XINIT_CONFIG_F)
 	cp -f $(PROFILE_F) $(PROFILE_CONFIG_F)
-	rm $(PROFILE_TEMP_F)
 
 reset:
 	@echo -e "\nRemoving build files..."
