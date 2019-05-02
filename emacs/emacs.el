@@ -1,8 +1,13 @@
 (package-initialize)
 (menu-bar-mode -1)
 
+(setq use-dialog-box nil)
+(toggle-scroll-bar -1)
+(tool-bar-mode -1) 
+
 (setq-default mode-line-format nil)
 
+(setq initial-buffer-choice "~/focal/oper")
 (setq backup-directory-alist `(("." . "~/.emacs.save.d")))
 
 (setq backup-by-copying t)
@@ -45,6 +50,8 @@ added: %U"
      "* TODO %?")
 
 )))
+
+
 
 (setq org-agenda-files (list todo-notes-file-self refile-notes-file-self))
 
