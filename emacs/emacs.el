@@ -20,27 +20,44 @@
 
 (add-hook 'window-setup-hook 'on-after-init)
 
+(require 'whitespace)
+(setq whitespace-line-column 80) ;; limit line length
+(setq whitespace-style '(face lines-tail))
+
+(add-hook 'prog-mode-hook 'whitespace-mode)
+
+(global-whitespace-mode +1)
 
 (require 'org)
 (global-set-key (kbd "C-c c") 'org-capture)
-(setq todo-notes-file-self "~/focal/notes/todo.org")
-(setq refile-notes-file-self "~/focal/notes/refile.org")
+(setq todo-notes-file-self "~/focal/oper/tasks/_refile.org")
+(setq journal-notes-file-self "~/focal/oper/notes/_journal.org")
+(setq refile-notes-file-self "~/focal/oper/notes/_refile.org")
 (setq org-capture-templates
   (quote (
-    ("t" "TODO" entry (file todo-notes-file-self)
+    ("t" "Task" entry (file todo-notes-file-self)
+     "** TODO %?
+added: %U"
+)
+    ("j" "Journal" entry (file+datetree journal-notes-file-self)
+     "* %?")
+    ("r" "Refile" entry (file refile-notes-file-self)
      "* TODO %?")
-    ("j" "Journal" entry (file+datetree refile-notes-file-self)
-     "* TODO %?")
+
 )))
+
+(setq org-agenda-files (list todo-notes-file-self refile-notes-file-self))
 
 (setq org-tag-alist '(
   ("sometime" . ?s)
   ("urgent" . ?u)
   ("minor" . ?m)
   ("important" . ?i)
-  ("evident" . ?i)
-  ("note" . ?i)))
-  
+  ("evident" . ?e)
+  ("uncertain" . ?u)))
+
+(setq org-link-search-must-match-exact-headline nil)
+
 (require 'org-ref)
 
 (require 'company)

@@ -1,9 +1,9 @@
 .PHONY: all reset handle_dual
 
-MAIN_D = $(HOME)/focal
-DRAFT_D = $(MAIN_D)/draft
-DOWNLOAD_D = $(MAIN_D)/net
-PROJECT_D = $(MAIN_D)/work
+MAIN_D = $(HOME)/focal/oper
+#DRAFT_D = $(MAIN_D)/draft
+#DOWNLOAD_D = $(MAIN_D)/net
+#PROJECT_D = $(MAIN_D)/work
 
 BUILD_N = build
 BUILD_D = $(PWD)/$(BUILD_N)
@@ -186,10 +186,10 @@ $(BASH_T): $(BASH_DEPS)
 
 $(INIT_T): $(INIT_DEPS)
 	@echo -e "\nPreparing initialization configuration files..."	
-	mkdir -p $(MAIN_D)
-	mkdir -p $(DRAFT_D)
-	mkdir -p $(DOWNLOAD_D)
-	mkdir -p $(PROJECT_D) 
+	#mkdir -p $(MAIN_D)
+	#mkdir -p $(DRAFT_D)
+	#mkdir -p $(DOWNLOAD_D)
+	#mkdir -p $(PROJECT_D) 
 	cp -f $(XINIT_F) $(XINIT_CONFIG_F)
 	cp -f $(PROFILE_F) $(PROFILE_CONFIG_F)
 
