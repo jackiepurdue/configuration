@@ -40,7 +40,7 @@
 (setq refile-notes-file-self "~/focal/oper/notes/_refile.org")
 (setq org-capture-templates
   (quote (
-    ("t" "Task" entry (file todo-notes-file-self)
+    ("t" "Task" entry (file+headline todo-notes-file-self "Tasks")
      "** TODO %?
 added: %U"
 )
