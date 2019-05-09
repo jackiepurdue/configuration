@@ -12,6 +12,7 @@ CONFIG_D = $(HOME)/.config
 I3_N = i3
 I3_STARTUP_N = startup.sh
 I3_CONFIG_D = $(CONFIG_D)/$(I3_N)
+I3_CONFIG_F = $(I3_CONFIG_D)/config
 I3_STARTUP_CONFIG_F = $(I3_CONFIG_D)/$(I3_STARTUP_N)
 I3_BUILD_D = $(BUILD_D)/$(I3_N)
 I3_D = $(PWD)/$(I3_N)
@@ -123,7 +124,7 @@ $(I3_BUILD_F): $(I3_DEPS)
 	mkdir -p $(I3_BUILD_D)
 	cat $(I3_DEPS) > $(I3_BUILD_F)
 	mkdir -p $(I3_CONFIG_D)
-	cp -f $(I3_BUILD_F) $(I3_CONFIG_D)/config
+	cp -f $(I3_BUILD_F) $(I3_CONFIG_F)
 	rm -f $(I3_DISPLAY_TEMP_F)
 
 handle_dual:
