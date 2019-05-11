@@ -9,11 +9,11 @@ I3_CONFIG_D = $(CONFIG_D)/$(I3_N)
 I3_CONFIG_F = $(I3_CONFIG_D)/config
 I3_STARTUP_CONFIG_F = $(I3_CONFIG_D)/$(I3_STARTUP_N)
 I3_D = $(PWD)/$(I3_N)
-I3_HEAD_F = $(I3_D)/i3-head.conf
-I3_DISPLAY_TEMP_F = $(I3_D)/i3-display-temp.conf
-I3_THEME_F = $(I3_D)/i3-theme.conf
-I3_BINDING_F = $(I3_D)/i3-binding.conf
-I3_BAR_F = $(I3_D)/i3-bar.conf
+I3_HEAD_F = $(I3_D)/i3_head.conf
+I3_DISPLAY_TEMP_F = $(I3_D)/i3_display_temp.conf
+I3_THEME_F = $(I3_D)/i3_theme.conf
+I3_BINDING_F = $(I3_D)/i3_binding.conf
+I3_BAR_F = $(I3_D)/i3_bar.conf
 
 NUM_MONITORS := $(shell xrandr --listmonitors | grep Monitors: \
                   | cut -d ' ' -f 2)
@@ -28,9 +28,9 @@ else
 endif
 
 I3_STATUS_CONFIG_D = $(CONFIG_D)/i3status
-I3_STATUS_THEME_F = $(I3_D)/i3-status-theme.conf
-I3_STATUS_ELEMENTS_DESKTOP_F = $(I3_D)/i3-status-elements-desktop.conf
-I3_STATUS_ELEMENTS_LAPTOP_F = $(I3_D)/i3-status-elements-laptop.conf
+I3_STATUS_THEME_F = $(I3_D)/i3_status_theme.conf
+I3_STATUS_ELEMENTS_DESKTOP_F = $(I3_D)/i3_status_elements_desktop.conf
+I3_STATUS_ELEMENTS_LAPTOP_F = $(I3_D)/i3_status_elements_laptop.conf
 I3_STATUS_CONFIG_F = $(I3_STATUS_CONFIG_D)/config
 
 LAPTOP_OR_DESKTOP := $(shell if [ "$(find  /sys/class/power_supply -mindepth 1 \
@@ -45,29 +45,29 @@ else
 	I3_STATUS_DEPS := $(I3_STATUS)
 endif
 
-BROWSER_N = browser
-BROWSER_CONFIG_D = $(CONFIG_D)/browser-start
-BROWSER_D = $(PWD)/$(BROWSER_N)
+START_PAGE_N = browser_start_page
+START_PAGE_CONFIG_D = $(CONFIG_D)/browser_start
+START_PAGE_D = $(PWD)/$(START_PAGE_N)
 
-BROWSER_INDEX_CONFIG_F = $(BROWSER_CONFIG_D)/index.html
-BROWSER_STYLES_CONFIG_F = $(BROWSER_CONFIG_D)/styles.css
-BROWSER_STYLES_CONFIG_F = $(BROWSER_CONFIG_D)/styles.css
-BROWSER_BUILD_TEMP_F = $(PWD)/tmp
-BROWSER_BASE_F = $(BROWSER_D)/base.html
-BROWSER_STYLES_F = $(BROWSER_D)/styles.css
-BROWSER_BODY_F =  $(BROWSER_D)/body.html
-BROWSER_HEAD_F = $(BROWSER_D)/head.html
-BROWSER_SCRIPTS_F = $(BROWSER_D)/scripts.js
-BROWSER_DEPS := $(BROWSER_BASE_F) $(BROWSER_STYLES_F) $(BROWSER_BODY_F) \
-                $(BROWSER_HEAD_F) $(BROWSER_SCRIPTS_F)
-BROWSER_T = $(BROWSER_INDEX_CONFIG_F) $(BROWSER_STYLES_CONFIG_F)
+START_PAGE_INDEX_CONFIG_F = $(START_PAGE_CONFIG_D)/index.html
+START_PAGE_STYLES_CONFIG_F = $(START_PAGE_CONFIG_D)/styles.css
+START_PAGE_STYLES_CONFIG_F = $(START_PAGE_CONFIG_D)/styles.css
+START_PAGE_BUILD_TEMP_F = $(PWD)/tmp
+START_PAGE_BASE_F = $(START_PAGE_D)/base.html
+START_PAGE_STYLES_F = $(START_PAGE_D)/styles.css
+START_PAGE_BODY_F =  $(START_PAGE_D)/body.html
+START_PAGE_HEAD_F = $(START_PAGE_D)/head.html
+START_PAGE_SCRIPTS_F = $(START_PAGE_D)/scripts.js
+START_PAGE_DEPS := $(START_PAGE_BASE_F) $(START_PAGE_STYLES_F) $(START_PAGE_BODY_F) \
+                $(START_PAGE_HEAD_F) $(START_PAGE_SCRIPTS_F)
+START_PAGE_T = $(START_PAGE_INDEX_CONFIG_F) $(START_PAGE_STYLES_CONFIG_F)
 
 FIREFOX_CONFIG_D = $(HOME)/.mozilla/firefox
 FIREFOX_PROFILE_N = $(shell ls $(FIREFOX_CONFIG_D) | grep '[a-z0-9]*.default' \
                     | head -n 1)
 FIREFOX_USER_CONFIG_D = $(FIREFOX_CONFIG_D)/$(FIREFOX_PROFILE_N)/chrome
 FIREFOX_USER_CONFIG_F = $(FIREFOX_USER_CONFIG_D)/userChrome.css
-FIREFOX_F = $(BROWSER_D)/browser-theme.css
+FIREFOX_F = $(START_PAGE_D)/browser_theme.css
 FIREFOX_T = $(FIREFOX_USER_CONFIG_F)
 FIREFOX_DEPS = $(FIREFOX_F)
 
@@ -91,12 +91,12 @@ INIT_D = $(PWD)/init
 XINIT_F = $(INIT_D)/xinitrc.conf
 PROFILE_F = $(INIT_D)/profile.conf
 PROFILE_CONFIG_F = $(HOME)/.bash_profile
-PROFILE_TEMP_F = $(I3_D)/profile-temp.conf
+PROFILE_TEMP_F = $(I3_D)/profile_temp.conf
 XINIT_CONFIG_F = $(HOME)/.xinitrc
 INIT_T = $(XINIT_CONFIG_F) $(PROFILE_CONFIG_F)
 INIT_DEPS = $(XINIT_F) $(PROFILE_F)
 
-all: $(EXTRA_TARGETS) $(I3_CONFIG_F) $(I3_STATUS_CONFIG_F) $(BROWSER_T) \
+all: $(EXTRA_TARGETS) $(I3_CONFIG_F) $(I3_STATUS_CONFIG_F) $(START_PAGE_T) \
      $(EMACS_T) $(BASH_T) $(FIREFOX_T) $(INIT_T)
 
 $(EXTRA_TARGETS): $(I3_DEPS)
@@ -125,20 +125,20 @@ $(I3_STATUS_CONFIG_F): $(I3_STATUS_DEPS)
 	mkdir -p $(I3_STATUS_CONFIG_D)
 	cat $(I3_STATUS) > $(I3_STATUS_CONFIG_F)
 
-$(BROWSER_INDEX_CONFIG_F) $(BROWSER_STYLES_CONFIG_F): $(BROWSER_DEPS)
+$(START_PAGE_T): $(START_PAGE_DEPS)
 	@echo -e "\nCreating a browser home page..."
-	mkdir -p $(BROWSER_CONFIG_D)
-	sed -e 's/^/    /' $(BROWSER_SCRIPTS_F) > $(BROWSER_BUILD_TEMP_F)
-	sed -e "/_SCRIPTS_/{r $(BROWSER_BUILD_TEMP_F)" -e "d}" \
-	$(BROWSER_BASE_F) > $(BROWSER_INDEX_CONFIG_F) 
-	sed -e 's/^/    /' $(BROWSER_HEAD_F) > $(BROWSER_BUILD_TEMP_F)
-	sed -i -e "/_HEAD_/{r $(BROWSER_BUILD_TEMP_F)" -e "d}" \
-	$(BROWSER_INDEX_CONFIG_F)
-	sed -e 's/^/    /' $(BROWSER_BODY_F) > $(BROWSER_BUILD_TEMP_F)
-	sed -i -e "/_BODY_/{r $(BROWSER_BUILD_TEMP_F)" -e "d}"  \
-	$(BROWSER_INDEX_CONFIG_F)
-	rm -f $(BROWSER_BUILD_TEMP_F)
-	cp -f $(BROWSER_STYLES_F) $(BROWSER_STYLES_CONFIG_F)
+	mkdir -p $(START_PAGE_CONFIG_D)
+	sed -e 's/^/    /' $(START_PAGE_SCRIPTS_F) > $(START_PAGE_BUILD_TEMP_F)
+	sed -e "/_SCRIPTS_/{r $(START_PAGE_BUILD_TEMP_F)" -e "d}" \
+	$(START_PAGE_BASE_F) > $(START_PAGE_INDEX_CONFIG_F) 
+	sed -e 's/^/    /' $(START_PAGE_HEAD_F) > $(START_PAGE_BUILD_TEMP_F)
+	sed -i -e "/_HEAD_/{r $(START_PAGE_BUILD_TEMP_F)" -e "d}" \
+	$(START_PAGE_INDEX_CONFIG_F)
+	sed -e 's/^/    /' $(START_PAGE_BODY_F) > $(START_PAGE_BUILD_TEMP_F)
+	sed -i -e "/_BODY_/{r $(START_PAGE_BUILD_TEMP_F)" -e "d}"  \
+	$(START_PAGE_INDEX_CONFIG_F)
+	rm -f $(START_PAGE_BUILD_TEMP_F)
+	cp -f $(START_PAGE_STYLES_F) $(START_PAGE_STYLES_CONFIG_F)
 
 $(FIREFOX_T): $(FIREFOX_DEPS)
 	@echo -e "\nPreparing minimalist firefox profile..."
@@ -166,7 +166,7 @@ reset:
 	@echo -e "\nRemoving build files..."
 	rm -rf $(I3_CONFIG_D)
 	rm -rf $(I3_STATUS_CONFIG_D)
-	rm -rf $(BROWSER_CONFIG_D)
+	rm -rf $(START_PAGE_CONFIG_D)
 	rm -rf $(EMACS_ADDONS_CONFIG_D)
 	rm -rf $(FIREFOX_USER_CONFIG_D)
 	rm -rf $(EMACS_CONFIG_F)
