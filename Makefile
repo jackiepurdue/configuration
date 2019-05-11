@@ -9,11 +9,11 @@ I3_CONFIG_D := $(CONFIG_D)/$(I3_N)
 I3_CONFIG_F := $(I3_CONFIG_D)/config
 I3_STARTUP_CONFIG_F := $(I3_CONFIG_D)/$(I3_STARTUP_N)
 I3_D := $(PWD)/$(I3_N)
-I3_HEAD_F := $(I3_D)/i3_head.conf
-I3_DISPLAY_TEMP_F := $(I3_D)/i3_display_temp.conf
-I3_THEME_F := $(I3_D)/i3_theme.conf
-I3_BINDING_F := $(I3_D)/i3_binding.conf
-I3_BAR_F := $(I3_D)/i3_bar.conf
+I3_HEAD_F := $(I3_D)/head.conf
+I3_DISPLAY_TEMP_F := $(I3_D)/display_temp.conf
+I3_THEME_F := $(I3_D)/theme.conf
+I3_BINDING_F := $(I3_D)/binding.conf
+I3_BAR_F := $(I3_D)/bar.conf
 
 NUM_MONITORS := $(shell xrandr --listmonitors | grep Monitors: \
                   | cut -d ' ' -f 2)
@@ -28,9 +28,9 @@ else
 endif
 
 I3_STATUS_CONFIG_D := $(CONFIG_D)/i3status
-I3_STATUS_THEME_F := $(I3_D)/i3_status_theme.conf
-I3_STATUS_ELEMENTS_DESKTOP_F := $(I3_D)/i3_status_elements_desktop.conf
-I3_STATUS_ELEMENTS_LAPTOP_F := $(I3_D)/i3_status_elements_laptop.conf
+I3_STATUS_THEME_F := $(I3_D)/status_theme.conf
+I3_STATUS_ELEMENTS_DESKTOP_F := $(I3_D)/status_elements_desktop.conf
+I3_STATUS_ELEMENTS_LAPTOP_F := $(I3_D)/status_elements_laptop.conf
 I3_STATUS_CONFIG_F := $(I3_STATUS_CONFIG_D)/config
 
 LAPTOP_OR_DESKTOP := $(shell if [ "$(find  /sys/class/power_supply -mindepth 1 \
