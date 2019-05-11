@@ -27,11 +27,14 @@ else
 	EXTRA_TARGETS := handle_dual
 endif
 
+I3_T := $(I3_CONFIG_F)
+
 I3_STATUS_CONFIG_D := $(CONFIG_D)/i3status
 I3_STATUS_THEME_F := $(I3_D)/status_theme.conf
 I3_STATUS_ELEMENTS_DESKTOP_F := $(I3_D)/status_elements_desktop.conf
 I3_STATUS_ELEMENTS_LAPTOP_F := $(I3_D)/status_elements_laptop.conf
 I3_STATUS_CONFIG_F := $(I3_STATUS_CONFIG_D)/config
+I3_STATUS_T := $(I3_STATUS_CONFIG_F)
 
 LAPTOP_OR_DESKTOP := $(shell if [ "$(find  /sys/class/power_supply -mindepth 1 \
                        -print -quit 2>/dev/null)" ]; then echo "Desktop"; else \
@@ -83,31 +86,36 @@ EMACS_T := $(EMACS_CONFIG_F) $(EMACS_ADDONS_CONFIG_D)
 BASH_D := $(PWD)/bash
 BASH_F := $(BASH_D)/bash.sh
 BASH_CONFIG_F := $(HOME)/.bashrc
-TERMINAL_F := $(BASH_D)/terminal.conf
-TERMINAL_CONFIG_F := $(HOME)/.Xdefaults
 BASH_DEPS := $(BASH_F) $(TERMINAL_F)
 BASH_T := $(BASH_CONFIG_F) $(TERMINAL_CONFIG_F)
 
-INIT_D := $(PWD)/init
-XINIT_F := $(INIT_D)/xinitrc.conf
-PROFILE_F := $(INIT_D)/profile.conf
+TERMINAL_F := $(BASH_D)/terminal.conf
+TERMINAL_CONFIG_F := $(HOME)/.Xdefaults
+TERMINAL_T := $(TERMINAL_CONFIG_F)
+
+XINIT_D := $(PWD)/init
+XINIT_F := $(XINIT_D)/xinitrc.conf
+XINIT_CONFIG_F := $(HOME)/.xinitrc
+XINIT_T := $(XINIT_CONFIG_F)
+XINIT_DEPS := $(XINIT_F) $(PROFILE_F)
+
+PROFILE_F := $(XINIT_D)/profile.conf
 PROFILE_CONFIG_F := $(HOME)/.bash_profile
 PROFILE_TEMP_F := $(I3_D)/profile_temp.conf
-XINIT_CONFIG_F := $(HOME)/.xinitrc
-INIT_T := $(XINIT_CONFIG_F) $(PROFILE_CONFIG_F)
-INIT_DEPS := $(XINIT_F) $(PROFILE_F)
+PROFILE_T  := $(PROFILE_CONFIG_F)
 
-RESET := $(I3_STATUS_CONFIG_D) $(EMACS_ADDONS_CONFIG_D) \
+RESET := $(I3_CONFIG_F) $(I3_STATUS_CONFIG_D) $(EMACS_ADDONS_CONFIG_D) \
         $(FIREFOX_USER_CONFIG_D) $(START_PAGE_CONFIG_D) $(EMACS_CONFIG_F) \
         $(BASH_CONFIG_F) $(TERMINAL_CONFIG_F) $(PROFILE_CONFIG_F) \
         $(XINIT_CONFIG_F)
 
-all: $(EXTRA_TARGETS) $(I3_CONFIG_F) $(I3_STATUS_CONFIG_F) $(START_PAGE_T) \
-     $(EMACS_T) $(BASH_T) $(FIREFOX_T) $(INIT_T)
+all: $(EXTRA_TARGETS) $(I3_T) $(I3_STATUS_T) $(START_PAGE_T) \
+     $(EMACS_T) $(BASH_T) $(FIREFOX_T) $(XINIT_T) $(TERMINAL_T) \
+     $(PROFILE_T)
 
 $(EXTRA_TARGETS): $(I3_DEPS)
 
-$(I3_CONFIG_F): $(I3_DEPS)
+$(I3_T): $(I3_DEPS)
 	@echo -e "\nPreparing i3-wm configuration files..."
 	@echo -e $(NUM_MONITORS) "monitor(s) with display(s):" $(MONITOR_0) \
 	", " $(MONITOR_1)
@@ -126,7 +134,7 @@ handle_dual:
 	echo "workspace 6 output $(MONITOR_0)" >> $(I3_DISPLAY_TEMP_F)
 	echo "workspace 1 output $(MONITOR_1)" >> $(I3_DISPLAY_TEMP_F)
 
-$(I3_STATUS_CONFIG_F): $(I3_STATUS_DEPS)
+$(I3_STATUS_T): $(I3_STATUS_DEPS)
 	@echo -e "\nPreparing i3status configuration files..."
 	mkdir -p $(I3_STATUS_CONFIG_D)
 	cat $(I3_STATUS) > $(I3_STATUS_CONFIG_F)
@@ -158,14 +166,20 @@ $(EMACS_T): $(EMACS_DEPS)
 	cp -f $(EMACS_F) $(EMACS_CONFIG_F)
 
 $(BASH_T): $(BASH_DEPS)
-	@echo -e "\nPreparing Bash and Urxvt configuration files..."
+	@echo -e "\nPreparing bash configuration files..."
 	cp -f $(BASH_F) $(BASH_CONFIG_F)
-	cp -f $(TERMINAL_F) $(TERMINAL_CONFIG_F)
 	echo -e "\ncd $(MAIN_D)" >> $(BASH_CONFIG_F)
 
-$(INIT_T): $(INIT_DEPS)
-	@echo -e "\nPreparing initialization configuration files..."	
+$(TERMINAL_T): $(TERMINAL_DEPS)
+	@echo -e "\nPreparing Urxvt configuration files..."
+	cp -f $(TERMINAL_F) $(TERMINAL_CONFIG_F)
+
+$(XINIT_T): $(XINIT_DEPS)
+	@echo -e "\nPreparing xinit..."	
 	cp -f $(XINIT_F) $(XINIT_CONFIG_F)
+
+$(PROFILE_T): $(PROFILE_DEPS)
+	@echo -e "\nPreparing bash login shell configuration"	
 	cp -f $(PROFILE_F) $(PROFILE_CONFIG_F)
 
 reset:
