@@ -96,6 +96,11 @@ XINIT_CONFIG_F = $(HOME)/.xinitrc
 INIT_T = $(XINIT_CONFIG_F) $(PROFILE_CONFIG_F)
 INIT_DEPS = $(XINIT_F) $(PROFILE_F)
 
+RESET = $(I3_STATUS_CONFIG_D) $(EMACS_ADDONS_CONFIG_D) \
+        $(FIREFOX_USER_CONFIG_D) $(START_PAGE_CONFIG_D) $(EMACS_CONFIG_F) \
+        $(BASH_CONFIG_F) $(TERMINAL_CONFIG_F) $(PROFILE_CONFIG_F) \
+        $(XINIT_CONFIG_F)
+
 all: $(EXTRA_TARGETS) $(I3_CONFIG_F) $(I3_STATUS_CONFIG_F) $(START_PAGE_T) \
      $(EMACS_T) $(BASH_T) $(FIREFOX_T) $(INIT_T)
 
@@ -164,13 +169,4 @@ $(INIT_T): $(INIT_DEPS)
 
 reset:
 	@echo -e "\nRemoving build files..."
-	rm -rf $(I3_CONFIG_D)
-	rm -rf $(I3_STATUS_CONFIG_D)
-	rm -rf $(START_PAGE_CONFIG_D)
-	rm -rf $(EMACS_ADDONS_CONFIG_D)
-	rm -rf $(FIREFOX_USER_CONFIG_D)
-	rm -rf $(EMACS_CONFIG_F)
-	rm -rf $(BASH_CONFIG_F)
-	rm -rf $(TERMINAL_CONFIG_F)
-	rm -rf $(PROFILE_CONFIG_F)
-	rm -rf $(XINIT_CONFIG_F)
+	rm -rf $(RESET)
