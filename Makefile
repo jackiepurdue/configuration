@@ -104,14 +104,10 @@ PROFILE_CONFIG_F := $(HOME)/.bash_profile
 PROFILE_TEMP_F := $(I3_D)/profile_temp.conf
 PROFILE_T  := $(PROFILE_CONFIG_F)
 
-RESET := $(I3_CONFIG_F) $(I3_STATUS_CONFIG_D) $(EMACS_ADDONS_CONFIG_D) \
-        $(FIREFOX_USER_CONFIG_D) $(START_PAGE_CONFIG_D) $(EMACS_CONFIG_F) \
-        $(BASH_CONFIG_F) $(TERMINAL_CONFIG_F) $(PROFILE_CONFIG_F) \
-        $(XINIT_CONFIG_F)
+RESET := $(I3_T) $(I3_STATUS_T) $(XINIT_T) $(PROFILE_T) $(BASH_T) \
+         $(TERMINAL_T) $(EMACS_T) $(FIREFOX_T) $(START_PAGE_T)
 
-all: $(EXTRA_TARGETS) $(I3_T) $(I3_STATUS_T) $(START_PAGE_T) \
-     $(EMACS_T) $(BASH_T) $(FIREFOX_T) $(XINIT_T) $(TERMINAL_T) \
-     $(PROFILE_T)
+all: $(EXTRA_TARGETS) $(RESET)
 
 $(EXTRA_TARGETS): $(I3_DEPS)
 
@@ -139,6 +135,29 @@ $(I3_STATUS_T): $(I3_STATUS_DEPS)
 	mkdir -p $(I3_STATUS_CONFIG_D)
 	cat $(I3_STATUS) > $(I3_STATUS_CONFIG_F)
 
+$(XINIT_T): $(XINIT_DEPS)
+	@echo -e "\nPreparing xinit..."	
+	cp -f $(XINIT_F) $(XINIT_CONFIG_F)
+
+$(PROFILE_T): $(PROFILE_DEPS)
+	@echo -e "\nPreparing bash login shell configuration"	
+	cp -f $(PROFILE_F) $(PROFILE_CONFIG_F)
+
+$(BASH_T): $(BASH_DEPS)
+	@echo -e "\nPreparing bash configuration files..."
+	cp -f $(BASH_F) $(BASH_CONFIG_F)
+	echo -e "\ncd $(MAIN_D)" >> $(BASH_CONFIG_F)
+
+$(TERMINAL_T): $(TERMINAL_DEPS)
+	@echo -e "\nPreparing Urxvt configuration files..."
+	cp -f $(TERMINAL_F) $(TERMINAL_CONFIG_F)
+
+$(EMACS_T): $(EMACS_DEPS)
+	@echo -e "\nPreparing emacs configuration files..."
+	mkdir -p $(EMACS_ADDONS_CONFIG_D)
+	cp -TR $(EMACS_ADDONS_D) $(EMACS_ADDONS_CONFIG_D)
+	cp -f $(EMACS_F) $(EMACS_CONFIG_F)
+
 $(START_PAGE_T): $(START_PAGE_DEPS)
 	@echo -e "\nCreating a browser home page..."
 	mkdir -p $(START_PAGE_CONFIG_D)
@@ -158,29 +177,6 @@ $(FIREFOX_T): $(FIREFOX_DEPS)
 	@echo -e "\nPreparing minimalist firefox profile..."
 	mkdir -p $(FIREFOX_USER_CONFIG_D)
 	cp -f $(FIREFOX_F) $(FIREFOX_USER_CONFIG_F)
-
-$(EMACS_T): $(EMACS_DEPS)
-	@echo -e "\nPreparing emacs configuration files..."
-	mkdir -p $(EMACS_ADDONS_CONFIG_D)
-	cp -TR $(EMACS_ADDONS_D) $(EMACS_ADDONS_CONFIG_D)
-	cp -f $(EMACS_F) $(EMACS_CONFIG_F)
-
-$(BASH_T): $(BASH_DEPS)
-	@echo -e "\nPreparing bash configuration files..."
-	cp -f $(BASH_F) $(BASH_CONFIG_F)
-	echo -e "\ncd $(MAIN_D)" >> $(BASH_CONFIG_F)
-
-$(TERMINAL_T): $(TERMINAL_DEPS)
-	@echo -e "\nPreparing Urxvt configuration files..."
-	cp -f $(TERMINAL_F) $(TERMINAL_CONFIG_F)
-
-$(XINIT_T): $(XINIT_DEPS)
-	@echo -e "\nPreparing xinit..."	
-	cp -f $(XINIT_F) $(XINIT_CONFIG_F)
-
-$(PROFILE_T): $(PROFILE_DEPS)
-	@echo -e "\nPreparing bash login shell configuration"	
-	cp -f $(PROFILE_F) $(PROFILE_CONFIG_F)
 
 reset:
 	@echo -e "\nRemoving build files..."
