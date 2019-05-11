@@ -178,6 +178,6 @@ $(FIREFOX_T): $(FIREFOX_DEPS)
 	mkdir -p $(FIREFOX_USER_CONFIG_D)
 	cp -f $(FIREFOX_F) $(FIREFOX_USER_CONFIG_F)
 
-reset:
+revert:
 	@echo -e "\nRemoving build files..."
 	rm -rf $(RESET)
