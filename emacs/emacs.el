@@ -52,7 +52,6 @@ added: %U"
 )))
 
 
-
 (setq org-agenda-files (list todo-notes-file-self refile-notes-file-self))
 
 (setq org-tag-alist '(
@@ -93,3 +92,17 @@ added: %U"
 (add-hook 'org-mode-hook 'my/org-mode-hook)
 
 
+(setq org-confirm-babel-evaluate nil
+      org-src-fontify-natively t
+      org-src-tab-acts-natively t)
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((shell      . t)
+   (js         . t)
+   (emacs-lisp . t)
+   (perl       . t)
+   (python     . t)
+   (ruby       . t)
+   (dot        . t)
+   (css        . t)))
