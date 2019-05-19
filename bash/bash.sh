@@ -121,4 +121,4 @@ extract () {
   fi
 }
 
-_main
+_main "$@"
