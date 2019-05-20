@@ -146,7 +146,7 @@ $(PROFILE_T): $(PROFILE_DEPS)
 $(BASH_T): $(BASH_DEPS)
 	@echo -e "\nPreparing bash configuration files..."
 	cp -f $(BASH_F) $(BASH_CONFIG_F)
-	echo "\ncd $(MAIN_D)" >> $(BASH_CONFIG_F)
+	echo -e "\ncd $(MAIN_D)" >> $(BASH_CONFIG_F)
 
 $(TERMINAL_T): $(TERMINAL_DEPS)
 	@echo -e "\nPreparing Urxvt configuration files..."
