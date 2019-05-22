@@ -106,3 +106,8 @@ added: %U"
    (ruby       . t)
    (dot        . t)
    (css        . t)))
+
+(add-to-list 'load-path "~/.emacs.d/elpa/rev-mode-20190522")
+(require 'rev-mode)
+;; setup files ending in “.rev” to open in rev-mode
+(add-to-list 'auto-mode-alist '("\\.rev\\'" . rev-mode))
