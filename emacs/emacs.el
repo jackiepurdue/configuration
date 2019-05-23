@@ -111,3 +111,7 @@ added: %U"
 (require 'rev-mode)
 ;; setup files ending in “.rev” to open in rev-mode
 (add-to-list 'auto-mode-alist '("\\.rev\\'" . rev-mode))
+
+(add-to-list 'load-path "~/.emacs.d/elpa/rust-mode-20190523/")
+(autoload 'rust-mode "rust-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
